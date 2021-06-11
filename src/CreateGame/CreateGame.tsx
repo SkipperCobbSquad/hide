@@ -34,12 +34,23 @@ const TextInput = styled.input`
   border-radius: 10px;
 `;
 
+const CreateGameButt = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  border-radius: 10px;
+  background: green;
+`;
+
 export const CreateGame = () => {
   const [userCount, setUserCount] = useState<number>(2);
   const [gameTime, setgameTime] = useState<number>(5);
   const [baseRadius, setbaseRadius] = useState<number>(5);
   const [gameRadius, setgameRadius] = useState<number>(10);
-  const [cord, setcord] = useState<number[]>([]);
+  const [cord, setcord] = useState<number[]>([0,0]);
   const [features, setFeatures] = useState<Feature[]>([]);
 
   const updateCircle = async () => {
@@ -57,15 +68,22 @@ export const CreateGame = () => {
             gameRadius
           ),
         });
-        setFeatures((state)=>{const a = state; a.push(circle); return a});
+        setFeatures([circle]);
       });
     } catch {}
   };
 
   useEffect(() => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setcord([pos.coords.longitude, pos.coords.latitude]);
+    })
+  }, [])
+
+  useEffect(() => {
     updateCircle();
     return () => {};
   }, [gameRadius]);
+
 
   //   useEffect(() => {
   //     try {
@@ -136,6 +154,10 @@ export const CreateGame = () => {
           max={gameRadius - baseRadius > 0 ? gameRadius - 1 : baseRadius}
           step={5}
         ></input>
+        <CreateGameButt>
+          {" "}
+          <p>Create Game</p>
+        </CreateGameButt>
       </InputHolder>
       <Map features={features}></Map>
     </CreateDiv>
