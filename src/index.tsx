@@ -4,6 +4,9 @@ import './index.css';
 import './icofont.min.css'
 import {App} from './App';
 import reportWebVitals from './reportWebVitals';
+import io from 'socket.io-client'
+
+export const socket = io('ws://localhost:5000')
 
 ReactDOM.render(
   <React.StrictMode>

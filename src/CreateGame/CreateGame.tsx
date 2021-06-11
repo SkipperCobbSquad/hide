@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { socket } from "../index";
 import { transform } from "ol/proj";
 
 import Map from "../Map/MapWrapper";
 import { Feature } from "ol";
 import Circle from "ol/geom/Circle";
+import { useHistory } from "react-router-dom";
 
 const CreateDiv = styled.div`
   display: flex;
@@ -46,12 +48,31 @@ const CreateGameButt = styled.div`
 `;
 
 export const CreateGame = () => {
+  const [name, setName] = useState<string>("");
   const [userCount, setUserCount] = useState<number>(2);
   const [gameTime, setgameTime] = useState<number>(5);
   const [baseRadius, setbaseRadius] = useState<number>(5);
   const [gameRadius, setgameRadius] = useState<number>(10);
   const [cord, setcord] = useState<number[]>([0, 0]);
   const [features, setFeatures] = useState<Feature[]>([]);
+  const history = useHistory();
+  const createGame = () => {
+    socket.emit(
+      "createGame",
+      {
+        name: name,
+        maxPlayers: userCount,
+        maxGameTime: gameTime, //in sec
+        closeZoneRadius: baseRadius,
+        fullZoneRadius: gameRadius,
+        gameIsPublic: true,
+      },
+      (data: any) => {
+        console.log(data);
+        history.push(`/createGame/priv/${data}`);
+      }
+    );
+  };
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) =>
       setcord([pos.coords.longitude, pos.coords.latitude])
@@ -72,33 +93,19 @@ export const CreateGame = () => {
   useEffect(() => {
     updateCircle();
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameRadius, cord]);
-  //   useEffect(() => {
-  //     try {
-  //       navigator.geolocation.getCurrentPosition((pos) => {
-  //         setcord([pos.coords.longitude, pos.coords.latitude]);
-  //         console.log(gameRadius);
-  //         const circle = new Feature({
-  //           geometry: new Circle(
-  //             transform(
-  //               [pos.coords.longitude, pos.coords.latitude],
-  //               "EPSG:4326",
-  //               "EPSG:3857"
-  //             ),
-  //             gameRadius
-  //           ),
-  //         });
-  //         setFeatures([circle]);
-  //       });
-  //     } catch {}
-  //     //   return ()=>{ setFeatures([])}
-  //   }, [gameRadius]);
 
   return (
     <CreateDiv>
       <InputHolder>
         <InputTitle>Nazwa Gry: </InputTitle>
-        <TextInput></TextInput>
+        <TextInput
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+          value={name}
+        ></TextInput>
         <InputTitle>Maksymalna ilość osób: {userCount}</InputTitle>
         <input
           type="range"
@@ -142,8 +149,7 @@ export const CreateGame = () => {
           max={gameRadius - baseRadius > 0 ? gameRadius - 1 : baseRadius}
           step={5}
         ></input>
-        <CreateGameButt>
-          {" "}
+        <CreateGameButt onClick={createGame}>
           <p>Create Game</p>
         </CreateGameButt>
       </InputHolder>

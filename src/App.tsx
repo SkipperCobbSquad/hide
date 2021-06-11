@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import { Home } from "./Home/Home";
 import { Games } from "./OpenGames/Games";
-import { CreateGame } from "./CreateGame/CreateGame";
 import {CreateRouter} from './CreateGame/router'
+import {GameRouter} from './Game/GameRouter'
 
 const MainDiv = styled.div`
   display: flex;
@@ -47,11 +47,12 @@ export const App = () => {
             <Route exact path="/">
               <Home></Home>
             </Route>
-            <Route exact path="/createGame" component={CreateRouter}>
+            <Route path="/createGame" component={CreateRouter}>
             </Route>
             <Route exact path="/openGames">
               <Games></Games>
             </Route>
+            <Route path={'/game'} component={GameRouter}></Route>
           </SwitchDiv>
         </Switch>
         <NavDiv>
