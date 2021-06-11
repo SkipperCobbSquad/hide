@@ -39,29 +39,43 @@ export const CreateGame = () => {
   const [gameTime, setgameTime] = useState<number>(5);
   const [baseRadius, setbaseRadius] = useState<number>(5);
   const [gameRadius, setgameRadius] = useState<number>(10);
-  const [cord, setcord] = useState<number[]>([]);
+  const [cord, setcord] = useState<number[]>([0,0]);
   const [features, setFeatures] = useState<Feature[]>([]);
+  navigator.geolocation.getCurrentPosition((pos) =>(setcord([pos.coords.longitude, pos.coords.latitude])))
+  // const updateCircle = async () => {
+  //   try {
+  //     await navigator.geolocation.getCurrentPosition((pos) => {
+  //       // setcord([pos.coords.longitude, pos.coords.latitude]);
+  //       console.log(gameRadius);
+  //       const circle = new Feature({
+  //         geometry: new Circle(
+  //           transform(
+  //             [pos.coords.longitude, pos.coords.latitude],
+  //             "EPSG:4326",
+  //             "EPSG:3857"
+  //           ),
+  //           gameRadius
+  //         ),
+  //       });
+  //       setFeatures((state)=>{const a = state; a.push(circle); return a});
+        
+  //     });
+  //   } catch {}
+  // };
 
-  const updateCircle = async () => {
-    try {
-      await navigator.geolocation.getCurrentPosition((pos) => {
-        setcord([pos.coords.longitude, pos.coords.latitude]);
-        console.log(gameRadius);
+  function updateCircle(){
+    console.log(gameRadius);
         const circle = new Feature({
           geometry: new Circle(
             transform(
-              [pos.coords.longitude, pos.coords.latitude],
+              cord,
               "EPSG:4326",
               "EPSG:3857"
             ),
             gameRadius
-          ),
-        });
-        setFeatures((state)=>{const a = state; a.push(circle); return a});
-      });
-    } catch {}
-  };
-
+          )})
+          setFeatures([circle])
+  }
   useEffect(() => {
     updateCircle();
     return () => {};
