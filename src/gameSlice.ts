@@ -47,6 +47,7 @@ export const gameSlice = createSlice({
       state.gameIsPublic = action.payload.gameIsPublic;
       state.fullZoneRadius = action.payload.fullZoneRadius;
       state.closeZoneRadius = action.payload.closeZoneRadius
+      state.playerAndStatus = action.payload.playerAndStatus
     },
   },
 });
