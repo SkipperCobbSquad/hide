@@ -1,9 +1,9 @@
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 export interface GameCardInterface {
   title: string;
-  current: number;
-  max: number;
+  link: string;
 }
 
 const GameCard = styled.div`
@@ -29,10 +29,13 @@ const UsersIn = styled.p`
 `;
 
 export const Game = (props: GameCardInterface) => {
+  const history = useHistory();
   return (
     <GameCard>
       <TitleCard>{props.title}</TitleCard>
-      <UsersIn>
+      <UsersIn onClick={()=>{
+        history.push(`/game/joinGame/${props.link}`)
+      }}>
         <i className="icofont-login"></i>
       </UsersIn>
     </GameCard>

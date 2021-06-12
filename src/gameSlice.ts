@@ -1,5 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
+export interface PlayerProp{
+  name:string,
+  role:string,
+  isReady:boolean,
+  pos:[number,number]
+}
 
 export interface GameState {
   name: string;
@@ -11,6 +17,7 @@ export interface GameState {
   maxPlayers: string;
   position: number[];
   timeToHide: number;
+  playerAndStatus:Array<[string, PlayerProp]>
 }
 
 const initialState: GameState = {
@@ -23,6 +30,7 @@ const initialState: GameState = {
   maxPlayers: "",
   position: [],
   timeToHide: 0,
+  playerAndStatus: []
 };
 
 export const gameSlice = createSlice({

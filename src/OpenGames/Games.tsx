@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import {socket} from '../index'
 
-import { Game, GameCardInterface } from "./Game";
+import { Game } from "./Game";
 
 const GamesDiv = styled.div`
   display: flex;
@@ -13,67 +13,23 @@ const GamesDiv = styled.div`
 `;
 
 export const Games = () => {
-  const dummyData: GameCardInterface[] = [
-    {
-      title: "Siema byku",
-      current: 2,
-      max: 10,
-    },
-    {
-      title: "Hide",
-      current: 10,
-      max: 20,
-    },
-    {
-      title: "Hide Me",
-      current: 10,
-      max: 20,
-    },
-    {
-      title: "Hide fuckers",
-      current: 10,
-      max: 20,
-    },
-    {
-      title: "Hide",
-      current: 10,
-      max: 20,
-    },
-    {
-      title: "Hide",
-      current: 10,
-      max: 20,
-    },
-    {
-      title: "Hide",
-      current: 10,
-      max: 20,
-    },
-    {
-      title: "Hide",
-      current: 10,
-      max: 20,
-    },
-    {
-      title: "Hide",
-      current: 10,
-      max: 20,
-    },
-  ];
+  const [data, setData] = useState<any[]>()
+
 
   useEffect(() => {
     socket.emit('public', (data: any)=>{
       console.log(data)
+      setData(data)
     })
   }, [])
 
   return (
     <GamesDiv>
-      {dummyData.map((g, i) => {
+      {data? data.map((g:any) => {
         return (
-          <Game key={i} title={g.title} current={g.current} max={g.max}></Game>
+          <Game key={g[1]} title={g[0]} link={g[1]}></Game>
         );
-      })}
+      }): null}
     </GamesDiv>
   );
 };

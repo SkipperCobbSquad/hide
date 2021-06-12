@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { useDispatch } from 'react-redux'
-import {setGame,GameState} from '../gameSlice'
+import { useDispatch } from "react-redux";
+import { setGame, GameState } from "../gameSlice";
 
 import { socket } from "../index";
 
@@ -15,12 +15,16 @@ const MainLobby = styled.div`
 `;
 export const Lobby = () => {
   let { id }: { id: string } = useParams();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const history = useHistory();
   useEffect(() => {
     socket.emit("joinGame", id, (data: any) => {
-      console.log(data)
-      const pop :GameState = {
+      console.log(data);
+      const mapMap: any = []
+      for (const [key, value] of Object.entries(data.playerAndStatus)) {
+        mapMap.push([key, value])
+      }
+      const pop: GameState = {
         name: data.name,
         closeZoneRadius: data.closeZoneRadius,
         fullZoneRadius: data.fullZoneRadius,
@@ -29,10 +33,11 @@ export const Lobby = () => {
         maxGameTime: data.maxGameTime,
         maxPlayers: data.maxPlayers,
         position: data.position,
-        timeToHide: data.timeToHide
-      }
-      console.log(pop)
-      dispatch(setGame(pop))
+        timeToHide: data.timeToHide,
+        playerAndStatus: mapMap,
+      };
+      console.log(pop);
+      dispatch(setGame(pop));
     });
     (async () => {
       socket.once("choice", (data: string) => {
@@ -40,7 +45,7 @@ export const Lobby = () => {
         history.push(`/game/choice/${data}`);
       });
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <MainLobby>

@@ -3,6 +3,8 @@ import QRCode from "qrcode.react";
 import styled from "styled-components";
 import { socket } from "../index";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setGame, GameState } from "../gameSlice";
 
 const PrivDiv = styled.div`
   display: flex;
@@ -29,6 +31,7 @@ export const PrivWelcome = () => {
   const [disable, setDisable] = useState<boolean>(false);
   let { id }: { id: string } = useParams();
   let { path } = useRouteMatch();
+  const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
@@ -39,13 +42,31 @@ export const PrivWelcome = () => {
       });
     })();
     return () => {};
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startGame = () => {
-    socket.emit("startGame", id, (data: string) => {
+    socket.emit("startGame", id, (data: any) => {
       setDisable(true);
       console.log(data);
+      const mapMap: any = []
+      for (const [key, value] of Object.entries(data.playerAndStatus)) {
+        mapMap.push([key, value])
+      }
+      const pop: GameState = {
+        name: data.name,
+        closeZoneRadius: data.closeZoneRadius,
+        fullZoneRadius: data.fullZoneRadius,
+        gameIsPublic: data.gameIsPublic,
+        joinPlayer: data.joinPlayer,
+        maxGameTime: data.maxGameTime,
+        maxPlayers: data.maxPlayers,
+        position: data.position,
+        timeToHide: data.timeToHide,
+        playerAndStatus: mapMap
+      };
+      console.log(pop);
+      dispatch(setGame(pop));
     });
   };
   console.log(id, path);
