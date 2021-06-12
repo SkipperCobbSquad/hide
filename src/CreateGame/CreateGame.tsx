@@ -18,7 +18,7 @@ const InputHolder = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  background: inherit;
+  background: transparent;
   padding: 15px 20px 15px 20px;
 `;
 
@@ -27,12 +27,21 @@ const InputTitle = styled.p`
   font-weight: bold;
 `;
 
+const StyleSVG = styled.svg`
+    position: fixed;
+    top: 30vh;
+    right: -45vw;
+    transform: rotate(-90deg);
+    z-index: -1;
+`
+
 const TextInput = styled.input`
   font-weight: bold;
   font-size: 20px;
   outline: none;
   padding: 10px;
-  border: 1px dashed #4895ef;
+  background: rgba(243, 242, 242, 0.781);
+  border: 1px solid #4895ef;
   border-radius: 10px;
 `;
 
@@ -44,7 +53,7 @@ const CreateGameButt = styled.div`
   align-items: center;
   margin: 10px;
   border-radius: 10px;
-  background: green;
+  background: #8cc4f2;
 `;
 
 export const CreateGame = () => {
@@ -66,7 +75,7 @@ export const CreateGame = () => {
         closeZoneRadius: baseRadius,
         fullZoneRadius: gameRadius,
         gameIsPublic: true,
-        position: transform(cord, "EPSG:4326", "EPSG:3857")
+        position: transform(cord, "EPSG:4326", "EPSG:3857"),
       },
       (data: any) => {
         console.log(data);
@@ -100,6 +109,16 @@ export const CreateGame = () => {
   return (
     <CreateDiv>
       <InputHolder>
+        <StyleSVG
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 320"
+        >
+          <path
+            fill="#8cc4f2"
+            fill-opacity="1"
+            d="M0,288L48,250.7C96,213,192,139,288,133.3C384,128,480,192,576,192C672,192,768,128,864,96C960,64,1056,64,1152,101.3C1248,139,1344,213,1392,250.7L1440,288L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+          ></path>
+        </StyleSVG>
         <InputTitle>Nazwa Gry: </InputTitle>
         <TextInput
           onChange={(e) => {
@@ -151,7 +170,7 @@ export const CreateGame = () => {
           step={5}
         ></input>
         <CreateGameButt onClick={createGame}>
-          <p>Create Game</p>
+          <p>Stwórz</p>
         </CreateGameButt>
       </InputHolder>
       <Map features={features}></Map>

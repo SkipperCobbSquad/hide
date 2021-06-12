@@ -13,7 +13,7 @@ const GamesDiv = styled.div`
 `;
 
 export const Games = () => {
-  const [data, setData] = useState<any[]>()
+  const [data, setData] = useState<any[]>([])
 
 
   useEffect(() => {
@@ -25,11 +25,11 @@ export const Games = () => {
 
   return (
     <GamesDiv>
-      {data? data.map((g:any) => {
+      {data.length? data.map((g:any) => {
         return (
           <Game key={g[1]} title={g[0]} link={g[1]}></Game>
         );
-      }): null}
+      }): <Game key={1} title="No Data" link='none'></Game>}
     </GamesDiv>
   );
 };
