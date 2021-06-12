@@ -231,7 +231,7 @@ function MapWrapper({ features }: MapWrapperInt) {
       // may be null on first render
 
       // set features to map
-      console.log("Kurwa 2")
+      console.log("Here 2")
       featuresLayer!.setSource(
         new VectorSource({
           features: features, // make sure features is an array
@@ -243,7 +243,7 @@ function MapWrapper({ features }: MapWrapperInt) {
         padding: [100, 100, 100, 100],
       });
     }
-    return ()=>{console.log("Kurwa 1")}
+    return ()=>{console.log("Here 1")}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [features]);
 

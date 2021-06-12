@@ -6,12 +6,15 @@ import {App} from './App';
 import reportWebVitals from './reportWebVitals';
 import io from 'socket.io-client'
 
+import {store} from './store'
+import { Provider } from 'react-redux'
+
 export const socket = io('ws://localhost:5000')
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 

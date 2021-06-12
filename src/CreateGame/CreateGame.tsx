@@ -66,6 +66,7 @@ export const CreateGame = () => {
         closeZoneRadius: baseRadius,
         fullZoneRadius: gameRadius,
         gameIsPublic: true,
+        position: transform(cord, "EPSG:4326", "EPSG:3857")
       },
       (data: any) => {
         console.log(data);

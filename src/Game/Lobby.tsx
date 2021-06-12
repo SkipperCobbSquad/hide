@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch } from 'react-redux'
+import {setGame,GameState} from '../gameSlice'
 
 import { socket } from "../index";
 
@@ -13,10 +15,24 @@ const MainLobby = styled.div`
 `;
 export const Lobby = () => {
   let { id }: { id: string } = useParams();
+  const dispatch = useDispatch()
   const history = useHistory();
   useEffect(() => {
     socket.emit("joinGame", id, (data: any) => {
-      console.log(data);
+      console.log(data)
+      const pop :GameState = {
+        name: data.name,
+        closeZoneRadius: data.closeZoneRadius,
+        fullZoneRadius: data.fullZoneRadius,
+        gameIsPublic: data.gameIsPublic,
+        joinPlayer: data.joinPlayer,
+        maxGameTime: data.maxGameTime,
+        maxPlayers: data.maxPlayers,
+        position: data.position,
+        timeToHide: data.timeToHide
+      }
+      console.log(pop)
+      dispatch(setGame(pop))
     });
     (async () => {
       socket.once("choice", (data: string) => {

@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import styled from "styled-components";
+import {socket} from '../index'
 
 import { Game, GameCardInterface } from "./Game";
 
@@ -58,6 +60,12 @@ export const Games = () => {
       max: 20,
     },
   ];
+
+  useEffect(() => {
+    socket.emit('public', (data: any)=>{
+      console.log(data)
+    })
+  }, [])
 
   return (
     <GamesDiv>
